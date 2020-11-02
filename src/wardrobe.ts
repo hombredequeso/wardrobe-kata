@@ -12,19 +12,19 @@ export function sum(a: number[]): number {
   return a.reduce((acc,v) => acc + v, 0);
 }
 
-// returns [elements summing to under max, elements summing equal to max]
+// returns [elements summing to under n, elements summing equal to n]
 // (throws the result away)
-export function splitToMeasure(max: number, a: number[][])
+export function splitToMeasure(n: number, a: number[][])
   : [number[][], number[][]] {
 
   let init: [number[][], number[][]] = [[], []];
   const reducer = (acc: [number[][], number[][]], v: number[]) : [number[][], number[][]] => {
     const [under, equal] = acc;
     const total = sum(v);
-    if (total < max) {
+    if (total < n) {
       under.push(v);
     }
-    if (total === max) {
+    if (total === n) {
       equal.push(v)
     }
     return [under, equal];
@@ -32,14 +32,16 @@ export function splitToMeasure(max: number, a: number[][])
   return a.reduce(reducer, init);
 }
 
-export function combinationsEqualling(x: number, amounts: number[]) {
-  const combos = combinationsR(x, amounts, [], amounts.map(x => [x]));
+export function combinationsEqualling(n: number, amounts: number[]) {
+  const [under, equal] = splitToMeasure(n, amounts.map(x => [x]));
+  const combos = combinationsR(n, amounts, equal, under);
+
   const sortedResults = combos.map(l => l.sort());
   return dedup(sortedResults);
 }
 
 export function combinationsR(
-  max: number, 
+  n: number, 
   amounts: number[], 
   accum: number[][],
   under: number[][])
@@ -48,11 +50,11 @@ export function combinationsR(
   const x: [number[],number][] = cartesian(under, amounts)
   const y: number[][] = x.map(([ns,n]) => ns.concat([n]))
 
-  const [under2, equal] = splitToMeasure(max, y);
+  const [under2, equal] = splitToMeasure(n, y);
 
   return ((under2.length === 0)?
     accum.concat(equal)
-    : combinationsR(max, amounts, accum.concat(equal), under2));
+    : combinationsR(n, amounts, accum.concat(equal), under2));
 }
 
 function arrayToMap(as: any[]) {

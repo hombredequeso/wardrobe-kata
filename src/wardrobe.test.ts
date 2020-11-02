@@ -63,32 +63,72 @@ describe('combinations', () => {
     ])
 
   })
+})
 
-  test('happy path 2', () => {
-    const max = 250;
-    const amounts = [ 50, 75, 100, 120];
-    // const result2 = combinationsR(
-    //   max, 
-    //   amounts, 
-    //   [], 
-    //   amounts.map(a => [a]));
+describe('combinationsEqualling', () => {
+  const test1:[string, number, number[],number[][]] = [
+    "happy path test",
+    250,
+    [ 50, 75, 100, 120],
+    [
+      [100,100,50],
+      [100,75,75],
+      [100,50,50,50],
+      [50,50,75,75],
+      [50,50,50,50,50]
+    ]
+  ];
 
-    // const sortedResults = result2.map(l => l.sort());
-    // const dedupedSorted = dedup(sortedResults);
+  const test2:[string, number, number[],number[][]] = [
+    "with amounts element equal to desired amount",
+    1,
+    [ 1],
+    [
+      [1]
+    ]
+  ];
 
-    const dedupedSorted = combinationsEqualling(250, amounts)
+  const emptyAmounts:[string, number, number[],number[][]] = [
+    "with no amounts",
+    0,
+    [],
+    [
+    ]
+  ];
 
-    const expectedResults = [
-            [100,100,50],
-            [100,75,75],
-            [100,50,50,50],
-            [50,50,75,75],
-            [50,50,50,50,50]];
+  const amountsGreaterThanN:[string, number, number[],number[][]] = [
+    "with amounts greater than n",
+    1,
+    [2,3,4],
+    [
+    ]
+  ];
 
-    expect(dedupedSorted.map(x =>  x.sort()).sort())
-      .toEqual(expectedResults.map(x =>  x.sort()).sort());
+  const basicTest:[string, number, number[],number[][]] = [
+    "basic test",
+    3,
+    [1,2,3],
+    [
+      [3],
+      [1,2],
+      [1,1,1]
+    ]
+  ];
 
-  })
+  test.each( [
+    test1,
+    test2,
+    emptyAmounts,
+    amountsGreaterThanN,
+    basicTest
+  ])('combinationsEqualling: %s', (
+    testName,
+    max, 
+    amounts, 
+    expectedResult) => {
+    expect(combinationsEqualling(max, amounts)).toEqual(expectedResult);
+  });
+
 })
 
 describe('dedup', () => {
