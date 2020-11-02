@@ -33,8 +33,11 @@ export function splitToMeasure(n: number, a: number[][])
 }
 
 export function combinationsEqualling(n: number, amounts: number[]) {
-  const [under, equal] = splitToMeasure(n, amounts.map(x => [x]));
-  const combos = combinationsR(n, amounts, equal, under);
+  const nonZeroAmounts = amounts.concat([]).filter(x => x !== 0);
+  const [under, equal] = splitToMeasure(
+    n, 
+    nonZeroAmounts.map(x => [x]));
+  const combos = combinationsR(n, nonZeroAmounts, equal, under);
 
   const sortedResults = combos.map(l => l.sort());
   return dedup(sortedResults);

@@ -115,12 +115,24 @@ describe('combinationsEqualling', () => {
     ]
   ];
 
+  const zeroAmountTest:[string, number, number[],number[][]] = [
+    "zero amount should be ignored",
+    3,
+    [0, 1,2,3],
+    [
+      [3],
+      [1,2],
+      [1,1,1]
+    ]
+  ];
+
   test.each( [
     test1,
     test2,
     emptyAmounts,
     amountsGreaterThanN,
-    basicTest
+    basicTest,
+    zeroAmountTest
   ])('combinationsEqualling: %s', (
     testName,
     max, 
